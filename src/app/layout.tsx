@@ -1,14 +1,17 @@
 import { Metadata } from 'next'
+import { Open_Sans } from 'next/font/google'
 
 export const metadata: Metadata = {
   title: "ReturnCraft",
   description: "ReturnCraft Application",
 };
 
-const pretendardFont = Pretendard({
-  subsets: ["latin"],
-  weight: "variable"
-});
+const openSans = Open_Sans({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700', '800'],
+  display: 'swap',
+  variable: '--font-opensans',
+})
 
 export default function RootLayout({
   children,
@@ -17,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={pretendardFont.className}>{children}</body>
+      <body className={`${openSans.className} antialiased`}>{children}</body>
     </html>
   )
 }
