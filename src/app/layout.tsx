@@ -1,35 +1,23 @@
-'use client';
-
-import { SessionProvider } from "next-auth/react";
-import type { Metadata } from "next";
-import "./globals.css";
-import { Inter } from "next/font/google";
-
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  weight: "variable"
-});
+import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: "ReturnCraft",
   description: "ReturnCraft Application",
 };
 
+const pretendardFont = Pretendard({
+  subsets: ["latin"],
+  weight: "variable"
+});
+
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
     <html lang="en">
-      <head>
-        <title>{metadata.title}</title>
-        <meta name="description" content={metadata.description} />
-      </head>
-      <body className={inter.className}>
-        <SessionProvider>{children}</SessionProvider>
-      </body>
+      <body className={pretendardFont.className}>{children}</body>
     </html>
-  );
+  )
 }
