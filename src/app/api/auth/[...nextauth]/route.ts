@@ -1,4 +1,4 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
+import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { saveUser } from "../../../../../lib/db";
 
@@ -7,7 +7,7 @@ const NEXTAUTH_URL = isDevelopment
   ? 'http://localhost:3000' 
   : `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
 
-export const authOptions: NextAuthOptions = {
+const handler = NextAuth({
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -26,6 +26,8 @@ export const authOptions: NextAuthOptions = {
       return true;
     },
   },
-};
+});
 
-export default NextAuth(authOptions);
+// GET과 POST 메소드 export
+export const GET = handler;
+export const POST = handler;
