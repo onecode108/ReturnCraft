@@ -1,6 +1,9 @@
 import { pgTable, serial, text, timestamp, varchar, uuid } from 'drizzle-orm/pg-core'
 import { sql } from 'drizzle-orm'
 
+// UUID 확장 활성화
+sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`.execute;
+
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
   name: text('name'),

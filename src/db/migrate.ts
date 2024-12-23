@@ -1,32 +1,41 @@
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import { Pool } from 'pg';
-import * as schema from './schema';
+import * as dotenv from 'dotenv';
+import { sql } from 'drizzle-orm';
+
+// .env 파일 로드
+dotenv.config();
+
+// 데이터베이스 연결 설정을 로깅
+console.log('Attempting to connect to:', process.env.DATABASE_URL);
 
 const pool = new Pool({
-  connectionString: process.env.POSTGRES_URL,
-  ssl: {
-    rejectUnauthorized: true
-  }
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: true
+    }
 });
 
-const db = drizzle(pool, { schema });
+const db = drizzle(pool);
 
 async function main() {
-  console.log('Migration started...');
-  
-  // UUID 확장 설치
-  await pool.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
-  
-  await migrate(db, {
-    migrationsFolder: 'src/db/migrations',
-    migrationsTable: 'drizzle_migrations'
-  });
-  console.log('Migration completed.');
-  await pool.end();
+    console.log('Starting migration...');
+    try {
+        // UUID 확장 설치
+        await db.execute(sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`);
+        
+        await migrate(db, { migrationsFolder: 'drizzle' });
+        console.log('Migration completed successfully');
+    } catch (error) {
+        console.error('Migration failed:', error);
+        throw error;
+    } finally {
+        await pool.end();
+    }
 }
 
 main().catch((err) => {
-  console.error('Migration failed:', err);
-  process.exit(1);
+    console.error(err);
+    process.exit(1);
 });
