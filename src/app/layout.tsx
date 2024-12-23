@@ -8,9 +8,7 @@ export const metadata: Metadata = {
 
 const openSans = Open_Sans({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700', '800'],
   display: 'swap',
-  variable: '--font-opensans',
 })
 
 export default function RootLayout({
@@ -19,8 +17,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={`${openSans.className} antialiased`}>{children}</body>
+    <html lang="en" className={openSans.className}>
+      <body>{children}</body>
     </html>
   )
 }
