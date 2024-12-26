@@ -3,33 +3,43 @@ import GoogleProvider from "next-auth/providers/google";
 import { headers } from 'next/headers'
 import { db } from '@/db'
 import { loginLogs } from '@/db/schema'
+import { users } from '@/db/schema'
 
 const handler = NextAuth({
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_ID || "",
-      clientSecret: process.env.GOOGLE_SECRET || "",
+      clientId: process.env.GOOGLE_ID!,
+      clientSecret: process.env.GOOGLE_SECRET!,
     }),
   ],
   callbacks: {
-    async signIn({ user }) {
-      if (user?.email) {
+    async signIn({ user, account }) {
+      if (account?.provider === 'google') {
         try {
-          const headersList = await headers()
-          const ipAddress = await headersList.get('x-forwarded-for')
-          const userAgent = await headersList.get('user-agent')
-          
+          // 로그인 로그 기록
           await db.insert(loginLogs).values({
-            userEmail: user.email,
-            ipAddress: ipAddress || 'unknown',
-            userAgent: userAgent || 'unknown'
-          })
+            email: user.email!,
+            userId: user.id
+          });
         } catch (error) {
-          console.error('Failed to save login log:', error)
-          // 로그인은 계속 진행
+          console.error('로그인 로그 기록 실패:', error);
         }
       }
-      return true
+      return true;
+    },
+    async session({ session, token }) {
+      if (session.user) {
+        // 사용자 정보를 세션에 추가
+        const userInfo = await db.query.users.findFirst({
+          where: (users, { eq }) => eq(users.email, session.user.email!)
+        });
+        
+        if (userInfo) {
+          session.user.name = userInfo.name;
+          session.user.id = userInfo.id;
+        }
+      }
+      return session;
     }
   }
 });
