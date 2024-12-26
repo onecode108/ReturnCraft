@@ -9,7 +9,8 @@ export default function SignupPage() {
     name: '',
     gender: '',
     age: '',
-    email: ''
+    email: '',
+    password: ''
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -23,7 +24,13 @@ export default function SignupPage() {
       });
 
       if (response.ok) {
-        router.push('/login');
+        const data = await response.json();
+        console.log('회원가입 성공:', data);
+        alert('회원가입이 완료되었습니다.');
+        router.push('/');
+      } else {
+        const errorData = await response.json();
+        console.error('회원가입 실패:', errorData);
       }
     } catch (error) {
       console.error('회원가입 실패:', error);
@@ -53,8 +60,8 @@ export default function SignupPage() {
             required
           >
             <option value="">선택하세요</option>
-            <option value="male">남성</option>
-            <option value="female">여성</option>
+            <option value="M">남성</option>
+            <option value="F">여성</option>
           </select>
         </div>
         <div className="mb-4">
@@ -73,6 +80,16 @@ export default function SignupPage() {
             type="email"
             value={formData.email}
             onChange={(e) => setFormData({...formData, email: e.target.value})}
+            className="w-full p-2 border rounded"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block mb-2">비밀번호</label>
+          <input
+            type="password"
+            value={formData.password}
+            onChange={(e) => setFormData({...formData, password: e.target.value})}
             className="w-full p-2 border rounded"
             required
           />

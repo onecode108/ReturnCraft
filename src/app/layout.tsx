@@ -3,6 +3,7 @@ import { Metadata } from 'next'
 import { Open_Sans } from 'next/font/google'
 import { getServerSession } from 'next-auth/next'
 import Link from 'next/link'
+import { authOptions } from '@/lib/auth'
 
 export const metadata: Metadata = {
   title: "ReturnCraft",
@@ -19,7 +20,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
 
   return (
     <html lang="ko" className={openSans.className}>

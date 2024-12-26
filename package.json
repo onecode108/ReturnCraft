@@ -17,6 +17,7 @@
     "@next/swc-win32-x64-msvc": "^15.1.2",
     "@prisma/client": "^6.1.0",
     "@vercel/postgres": "^0.10.0",
+    "bcrypt": "^5.1.1",
     "drizzle-orm": "^0.38.2",
     "next": "15.0.4",
     "next-auth": "^4.24.11",
@@ -26,6 +27,7 @@
     "uuid": "^11.0.3"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/node": "^20",
     "@types/pg": "^8.11.10",
     "@types/react": "^19",

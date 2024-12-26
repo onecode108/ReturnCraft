@@ -12,6 +12,7 @@ export const users = pgTable('users', {
   image: text('image'),
   gender: varchar('gender', { length: 10 }).notNull(),
   age: integer('age').notNull(),
+  password: text('password').notNull(),
   createdAt: timestamp('created_at').defaultNow()
 })
 
